@@ -38,6 +38,14 @@ const questions = [
 function init() {
     inquirer.prompt(questions)
         .then((answer) => {
+
+
+            for (const [key, value] of Object.entries(answer)) {
+                // Print each key-value pair in a user-friendly format
+                console.log(`${key}: ${value}`);
+            }
+
+
             switch (answer.action) {
                 case 'View All Employees':
                     viewAllEmployees();
@@ -61,7 +69,7 @@ function viewAllEmployees() {
             console.error('Error occurred:', err);
             return;
         }
-        console.log(results);
+        console.table(results);
     });
 }
 
@@ -72,7 +80,7 @@ function viewAllDepartments() {
             console.error('Error occurred:', err);
             return;
         }
-        console.log(results);
+        console.table(results);
     });
 }
 
