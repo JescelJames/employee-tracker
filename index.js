@@ -25,33 +25,55 @@
         //     });
 
 // TODO: Create an array of questions for user input
-    const questions = [
-
-        {
+const questions = [
+    {
         type: 'list',
         message: 'What would you like to do?',
-        name: 'license',
-        choices: ['View All Employees', 'None'],
-        },
-    ];
+        name: 'action',
+        choices: ['View All Employees', 'View All Departments', 'None'],
+    },
+];
 
+// Initialize the application
 function init() {
-    inquirer.prompt (questions)
-
-    .then(() => {
-       db.query('SELECT * FROM departments', function (err, results) {
-                 console.log(results);
-               });
-        
-        
-        
-      
-      
-      
-        // console.log(answer);
-
-    })
-    
+    inquirer.prompt(questions)
+        .then((answer) => {
+            switch (answer.action) {
+                case 'View All Employees':
+                    viewAllEmployees();
+                    break;
+                case 'View All Departments':
+                    viewAllDepartments();
+                    break;
+                default:
+                    console.log('No action selected');
+            }
+        })
+        .catch((error) => {
+            console.error('Error occurred:', error);
+        });
 };
+
+// Function to view all employees
+function viewAllEmployees() {
+    db.query('SELECT * FROM employees', function (err, results) {
+        if (err) {
+            console.error('Error occurred:', err);
+            return;
+        }
+        console.log(results);
+    });
+}
+
+// Function to view all departments
+function viewAllDepartments() {
+    db.query('SELECT * FROM departments', function (err, results) {
+        if (err) {
+            console.error('Error occurred:', err);
+            return;
+        }
+        console.log(results);
+    });
+}
 
 init();
