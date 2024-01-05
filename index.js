@@ -30,7 +30,15 @@
             type: 'list',
             message: 'What would you like to do?',
             name: 'action',
-            choices: ['View All Employees', 'View All Departments', 'None'],
+            choices: [
+                'View All Employees', 
+                'Add Employee',
+                'Update Employee Role',
+                'View All Roles',
+                'Add Role',
+                'View All Departments', 
+                'None'
+            ],
         },
     ];
 
