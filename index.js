@@ -24,64 +24,76 @@
         //     console.log(results);
         //     });
 
-// TODO: Create an array of questions for user input
-const questions = [
-    {
-        type: 'list',
-        message: 'What would you like to do?',
-        name: 'action',
-        choices: ['View All Employees', 'View All Departments', 'None'],
-    },
-];
+// PROMPT QUESTIONS __________________________________
+    const questions = [
+        {
+            type: 'list',
+            message: 'What would you like to do?',
+            name: 'action',
+            choices: ['View All Employees', 'View All Departments', 'None'],
+        },
+    ];
 
-// Initialize the application
-function init() {
-    inquirer.prompt(questions)
-        .then((answer) => {
+// FUNCTIONS _________________________________________________
 
+    //Initilize Function ----------------------------------
 
-            for (const [key, value] of Object.entries(answer)) {
-                // Print each key-value pair in a user-friendly format
-                console.log(`${key}: ${value}`);
-            }
+        function init() {
+            inquirer.prompt(questions)
+                .then((answer) => {
 
 
-            switch (answer.action) {
-                case 'View All Employees':
-                    viewAllEmployees();
-                    break;
-                case 'View All Departments':
-                    viewAllDepartments();
-                    break;
-                default:
-                    console.log('No action selected');
-            }
-        })
-        .catch((error) => {
-            console.error('Error occurred:', error);
-        });
-};
+                    for (const [key, value] of Object.entries(answer)) {
+                        // Print each key-value pair in a user-friendly format
+                        console.log(`${key}: ${value}`);
+                    }
 
-// Function to view all employees
-function viewAllEmployees() {
-    db.query('SELECT * FROM employees', function (err, results) {
-        if (err) {
-            console.error('Error occurred:', err);
-            return;
+
+                    switch (answer.action) {
+                        case 'View All Employees':
+                            viewAllEmployees();
+                            break;
+                        case 'View All Departments':
+                            viewAllDepartments();
+                            break;
+                        default:
+                            console.log('No action selected');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error occurred:', error);
+                });
+            
+        };
+
+
+
+    // View All Employees Function -----------------------
+
+        function viewAllEmployees() {
+            db.query('SELECT * FROM employees', function (err, results) {
+                if (err) {
+                    console.error('Error occurred:', err);
+                    return;
+                }
+                console.table(results);
+                process.exit(0);
+            });
         }
-        console.table(results);
-    });
-}
 
-// Function to view all departments
-function viewAllDepartments() {
-    db.query('SELECT * FROM departments', function (err, results) {
-        if (err) {
-            console.error('Error occurred:', err);
-            return;
+    // View  All Department Function ------------------------------
+    
+        function viewAllDepartments() {
+            db.query('SELECT * FROM departments', function (err, results) {
+                if (err) {
+                    console.error('Error occurred:', err);
+                    return;
+                }
+                console.table(results);
+            });
         }
-        console.table(results);
-    });
-}
 
-init();
+// INITIALIZE _________________________
+
+    init();
+//______________________________________
