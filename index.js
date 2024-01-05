@@ -31,13 +31,14 @@
             message: 'What would you like to do?',
             name: 'action',
             choices: [
-                'View All Employees', 
-                'Add Employee',
-                'Update Employee Role',
-                'View All Roles',
-                'Add Role',
                 'View All Departments', 
-                'None'
+                'View All Employees', 
+                'View All Roles',
+                'Add Deparment',
+                'Add Employee',
+                'Add Role',
+                'Update Employee Role',
+                'None',
             ],
         },
     ];
@@ -50,20 +51,17 @@
             inquirer.prompt(questions)
                 .then((answer) => {
 
-
-                    for (const [key, value] of Object.entries(answer)) {
-                        // Print each key-value pair in a user-friendly format
-                        console.log(`${key}: ${value}`);
-                    }
-
-
                     switch (answer.action) {
-                        case 'View All Employees':
-                            viewAllEmployees();
-                            break;
                         case 'View All Departments':
                             viewAllDepartments();
                             break;
+                        case 'View All Employees':
+                            viewAllEmployees();
+                            break;
+                        case 'View All Roles':
+                            viewAllRoles();
+                            break;
+                        
                         default:
                             console.log('No action selected');
                     }
@@ -75,6 +73,18 @@
         };
 
 
+    // View  All Department Function ------------------------------
+    
+        function viewAllDepartments() {
+            db.query('SELECT * FROM departments', function (err, results) {
+                if (err) {
+                    console.error('Error occurred:', err);
+                    return;
+                }
+                console.table(results);
+                process.exit(0);
+            });
+        }
 
     // View All Employees Function -----------------------
 
@@ -89,17 +99,20 @@
             });
         }
 
-    // View  All Department Function ------------------------------
-    
-        function viewAllDepartments() {
-            db.query('SELECT * FROM departments', function (err, results) {
+    // View All Roles Function -----------------------
+
+        function viewAllRoles() {
+            db.query('SELECT * FROM roles', function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
                 console.table(results);
+                process.exit(0);
             });
         }
+
+
 
 // INITIALIZE _________________________
 
