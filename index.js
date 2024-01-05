@@ -11,7 +11,7 @@
         {
             host: 'localhost',
             user: 'root',
-            password: 'Jimmy777$!',
+            password: 'rootroot',
             database: 'employee_tracker_db',
             
         },
@@ -83,11 +83,17 @@
             
         };
 
-
+        // function formatResultsForTable(results) {
+        //     let formattedResults = {};
+        //     results.forEach((row, index) => {
+        //         formattedResults[`index `] = row;
+        //     });
+        //     return formattedResults;
+        // }
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
-            const query = `SELECT * FROM departments`;
+            const query = `SELECT name FROM departments`;
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
@@ -98,35 +104,44 @@
                 //     console.log(JSON.stringify(row));
                 //   });
 
-                // const formattedResults = results.reduce((acc, row, index) => {
+                // let arrNoIndex = results.reduce((acc, row, index) => {
                 //     acc[index] = row;
-                //     return index;
+                //      return acc;
                 //   }, {});
-                    //    console.table(formattedResults);
+                //        console.table(arrNoIndex);
 
                 // console.table(results);
+
+                // let formattedResults = formatResultsForTable(results);
+                // console.table(formattedResults);
                 
+
                 // console.log(results);
-                process.exit(0);
+                console.table(results);
+             process.exit(0);
                 
 
                 // results.forEach((row, index) => {
                 //     console.table(`Department ${index + 1}:`, row);
                 // });
             });
+            
         }
 
     // View All Employees Function -----------------------
 
         function viewAllEmployees() {
-            db.query('SELECT * FROM employees', function (err, results) {
+            const query = `SELECT * FROM employees`;
+            db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
                 console.table(results);
+                process.exit(0);
                 
             });
+            
         }
 
     // View All Roles Function -----------------------
@@ -213,6 +228,7 @@
                         return;
                     }
                     console.log('Employee added successfully!');
+                    process.exit(0);
                 });
             }).catch((error) => {
                 console.error('Error occurred:', error);
