@@ -61,6 +61,18 @@
                         case 'View All Roles':
                             viewAllRoles();
                             break;
+                        case 'Add Deparment':
+                            addDepartment();
+                            break;
+                        case 'Add Employee':
+                            addEmployee();
+                            break;
+                        case 'Add Role':
+                            addRole();
+                            break;
+                        case 'Update Employee Role':
+                            updateEmployeeRole();
+                            break;
                         
                         default:
                             console.log('No action selected');
@@ -112,7 +124,28 @@
             });
         }
 
+    // Add Department Function -----------------------
 
+        function addDepartment() {}
+
+
+    // Add Employee Function -----------------------
+
+        function addEmployee() {}
+
+
+    // Add Role Function -----------------------
+
+        function addRole() {}
+
+
+    // Update Employee Role Function -----------------------
+
+       function updateEmployeeRole() {}
+       
+    //______________________________________
+       
+       
 
 // INITIALIZE _________________________
 
