@@ -24,7 +24,7 @@
         //     console.log(results);
         //     });
 
-// PROMPT QUESTIONS __________________________________
+// MAIN PROMPT QUESTIONS __________________________________
     const questions = [
         {
             type: 'list',
