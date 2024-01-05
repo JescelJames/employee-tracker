@@ -87,14 +87,24 @@
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
-            db.query('SELECT * FROM departments', function (err, results) {
+            const query = `SELECT * FROM departments`;
+            db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
 
-                       console.table(results);
-        
+                // results.forEach(row => {
+                //     console.log(JSON.stringify(row));
+                //   });
+
+                // const formattedResults = results.reduce((acc, row, index) => {
+                //     acc[index] = row;
+                //     return index;
+                //   }, {});
+                    //    console.table(formattedResults);
+
+                // console.table(results);
                 
                 // console.log(results);
                 process.exit(0);
