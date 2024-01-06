@@ -6,19 +6,19 @@ require('dotenv').config();
 
     // Connect to database
     const db = mysql.createConnection(
+
         {
             host: 'localhost',
-            user: 'root',
-            password: 'rootroot',
-            database: 'employee_tracker_db',
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
             
         },
         console.log(`Connected to the employee_tracker_db database.`)
         );
 
-        
-        // db.query('SELECT * FROM departments', function (err, results) {
-        //     console.log(results);
-        //     });
+// EXPORT THIS MODULE ________________________________
 
         module.exports = db;
+
+        
