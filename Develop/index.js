@@ -3,7 +3,7 @@
     const inquirer = require('inquirer');
     // const mysql = require('mysql2');
     const db = require('./config/connection');
-    require('console.table');
+    require('console.table'); // to printout that looks like mysql
 
 // // CONNECT TO DATABASE ___________________________________    
 
