@@ -20,9 +20,6 @@ require('dotenv').config();
         console.log(`Connected to the employee_tracker_db database.`)
         );
 
-        
-        // db.query('SELECT * FROM departments', function (err, results) {
-        //     console.log(results);
-        //     });
+
 
         module.exports = db;
