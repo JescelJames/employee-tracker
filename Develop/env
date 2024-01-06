@@ -1,0 +1,3 @@
+DB_NAME ='travel_tracker_db'
+DB_USER = 'root'
+DB_PASSWORD = 'rootroot'
