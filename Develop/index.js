@@ -179,14 +179,8 @@
                 console.error('Error occurred:', error);
             });
         }                
-                
-                
+    
         
-
-
-        
-
-
     // Add Employee Function -----------------------
 
 
