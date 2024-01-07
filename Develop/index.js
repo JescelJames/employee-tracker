@@ -266,8 +266,10 @@
                             console.error('Error occurred:', err);
                             return;
                         }
-
-                    console.log('Employee added successfully!');
+                        console.log("__________________________________________________");
+                        console.log(`      ${firstName} ${lastName} added successfully! `)
+                        console.log("__________________________________________________");
+                    // console.log('Employee added successfully!');
                     process.exit(0);
                 });
             })
