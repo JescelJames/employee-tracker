@@ -219,10 +219,6 @@
                 'Legal Team Lead': 7,
                 'None': null,
             }
-            // const managerChoices = {
-            //     ''
-            // }
- 
 
             inquirer.prompt([
                 {
@@ -254,7 +250,7 @@
                 const { firstName, lastName, role, manager } = answers;
 
                 const roleId = roleChoices[role];
-                const managerId = managerChoices[manager]
+                const managerId = managerChoices[manager];
                 
                 const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
                                 VALUES (?, ?, ?, ?)`;
@@ -267,7 +263,7 @@
                             return;
                         }
                         console.log("__________________________________________________");
-                        console.log(`      ${firstName} ${lastName} added successfully! `)
+                        console.log(`      ${firstName} ${lastName} added successfully! `);
                         console.log("__________________________________________________");
                     // console.log('Employee added successfully!');
                     process.exit(0);
@@ -295,8 +291,14 @@
     // Add Role Function -----------------------
 
         function addRole() {
+            const db = require('./config/connection');
 
-            const departmentChoices = []
+            const departmentChoices = {
+                'Engineering': 1,
+                'Finance': 2,
+                'Legal': 3,
+                'Sales': 4,
+            }
 
             inquirer.prompt([
                 {
@@ -325,24 +327,24 @@
                     type: 'list',
                     name: 'departmentName',
                     message: 'Enter the Department Name: ',
-                    choices: departmentChoices,
+                    choices: Object.keys(departmentChoices),
                 },
             ])
 
             .then((answers) => {
                 
+                const { newRoleTitle, newRoleSalary, departmentName } = answers;    
 
+                const departmentId = departmentChoices[departmentName];
 
                 const query = `INSERT INTO roles (title, salary, department_id)
                                 VALUES (?, ?, ?)`;
 
-                const { newRoleTitle, newRoleSalary, departmentName } = answers;                
-                // const { newRoleTitle, newRoleSalary, departmentName } = answers;
-                // const query = `INSERT INTO roles (title, salary, department_id)
-                //                 VALUES (?, ?, ?)`;
-                getDepartmentId(departmentName, (departmentId) => {
-                    db.query(query, [newRoleTitle, newRoleSalary, departmentName], function (err, results) {
-                    // db.query(query, [newRoleTitle, newRoleSalary,], function (err, results) {
+                            
+
+                // getDepartmentId(departmentName, (departmentId) => {
+                    db.query(query, [newRoleTitle, newRoleSalary, departmentId], function (err, results) {
+                   
                         if (err) {
                             console.error('Error occurred:', err);
                             return;
@@ -350,7 +352,7 @@
                         console.log('Role added successfully!');
                         process.exit(0);
                     });
-                })
+                // })
             })
 
             .catch((error) => {
@@ -374,6 +376,20 @@
                         }
                     });
                 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // Update Employee Role Function -----------------------
