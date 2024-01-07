@@ -257,14 +257,24 @@
                     name: 'roleTitle',
                     message: 'Enter the title of the role: ',
                 },
+                {
+                    type: 'input',
+                    name: 'roleSalary',
+                    message: 'Enter the salary of the role: ',
+                },
+                {
+                    type: 'input',
+                    name: 'roleSalary',
+                    message: 'Enter the salary of the role: ',
+                },
             ])
 
             .then((answers) => {
-                const {roleTitle} = answers;
-                const query = `INSERT INTO roles (title)
-                                VALUES (?)`;
+                const { roleTitle, roleSalary } = answers;
+                const query = `INSERT INTO roles (title, salary)
+                                VALUES (?, ?)`;
 
-                db.query(query, [roleTitle], function (err, results) {
+                db.query(query, [roleTitle, roleSalary], function (err, results) {
                     if (err) {
                         console.error('Error occurred:', err);
                         return;
