@@ -70,13 +70,18 @@
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
-            const query = `SELECT name FROM departments`;
+            const query = `SELECT 
+                                departments.id AS 'ID',
+                                departments.name AS 'Name'
+                            FROM departments`;
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
-
+                console.log("=========================");
+                console.log(`       DEPARTMENTS       `);
+                console.log("=========================");
                 console.table(results);
                 process.exit(0);
 
@@ -93,6 +98,7 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                
                 console.table(results);
                 process.exit(0);
                 
@@ -104,18 +110,19 @@
 
         function viewAllRoles() {
             const query = `SELECT 
-            roles.id AS 'Role ID', 
-            roles.title AS 'Job Title', 
-            departments.name AS 'Department', 
-            roles.salary AS 'Salary'
-        FROM roles
-        JOIN departments ON roles.department_id = departments.id;
+                                roles.id AS 'Role ID', 
+                                roles.title AS 'Job Title', 
+                                departments.name AS 'Department', 
+                                roles.salary AS 'Salary'
+                            FROM roles JOIN departments 
+                            ON roles.department_id = departments.id;
         `
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.log("=================================================")
                 console.table(results);
                 process.exit(0);
             });
