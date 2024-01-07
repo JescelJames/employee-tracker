@@ -203,7 +203,8 @@
                 //     message: "Who is the employee's manager?",
                 //     choices: managerChoices,
                 // }
-            ]).then((answers) => {
+            ])
+            .then((answers) => {
                 // Insert the new employee into the database
                 const { firstName, lastName, role, manager } = answers;
 

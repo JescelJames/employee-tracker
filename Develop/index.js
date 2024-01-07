@@ -149,26 +149,47 @@
     // Add Department Function -----------------------
 
         function addDepartment() {
+                inquirer
+                .prompt([
+                    
+                        {
+                            type: 'input',
+                            name: 'departmentName',
+                            message: 'Enter the name of the department:'
+                        }
+                ])
 
-        //     db.query('UPDATE * FROM departments', function (err, results) {
-        //         if (err) {
-        //             console.error('Error occurred:', err);
-        //             return;
-        //         }
-        //         console.table(results);
-        //         process.exit(0);
-        //     });
-        // }
+                .then((answers) => {
+                    const { departmentName } = answers;
+                
 
 
-            // db.promise().query('SELECT * FROM departments')
-            // .then( ([rows,fields]) => {
-            //   console.log(rows);
-            // })
-            // .catch(console.log)
-            // .then( () => db.end());
+                    const query = `INSERT INTO departments (name)
+                                    VALUES (?)`;
 
-        }
+
+                    db.query(query, function (err, results) {
+                        if (err) {
+                            console.error('Error occurred:', err);
+                            return;
+                        }
+                        console.log('Department added successfully!');
+                        process.exit(0);
+                    });
+                
+                })
+
+                .catch((error) => {
+                    console.error('Error occurred:', error);
+                });
+         }
+                
+                
+                
+        
+
+
+        
 
 
     // Add Employee Function -----------------------
