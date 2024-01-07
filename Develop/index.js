@@ -204,7 +204,13 @@
 
             const roleChoices = {
                 'Sales Lead': 1,
-                'Sales Person': 2
+                'Sales Person': 2,
+                'Lead Engineer': 3,
+                'Software Engineer': 4,
+                'Account Manager': 5,
+                'Accountant': 6,
+                'Legal Team Lead': 7,
+                'Lawyer': 8,
             }; 
             const managerChoices = {
                 'Sales Lead': 1,
