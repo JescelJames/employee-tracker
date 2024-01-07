@@ -181,7 +181,11 @@
                         console.error('Error occurred:', err);
                         return;
                     }
-                    console.log('Department added successfully!');
+                    // console.clear();
+                    console.log("__________________________________________________");
+                    console.log(`      ${departmentName} Department added successfully! `)
+                    console.log("__________________________________________________");
+                    console.log('');
                     process.exit(0);
                 });
             })
