@@ -93,24 +93,25 @@
 
         function viewAllEmployees() {
             const query = `SELECT 
-            e.id AS 'Employee ID', 
-            e.first_name AS 'First Name', 
-            e.last_name AS 'Last Name', 
-            r.title AS 'Job Title', 
-            d.name AS 'Department', 
-            r.salary AS 'Salary',
-            CONCAT(m.first_name, ' ', m.last_name) AS 'Manager'
-        FROM employees e
-        JOIN roles r ON e.role_id = r.id
-        JOIN departments d ON r.department_id = d.id
-        LEFT JOIN employees m ON e.manager_id = m.id;
-        `;
+                                e.id AS 'Employee ID', 
+                                e.first_name AS 'First Name', 
+                                e.last_name AS 'Last Name', 
+                                r.title AS 'Job Title', 
+                                d.name AS 'Department', 
+                                r.salary AS 'Salary',
+                                CONCAT(m.first_name, ' ', m.last_name) AS 'Manager'
+                        FROM employees e
+                        JOIN roles r ON e.role_id = r.id
+                        JOIN departments d ON r.department_id = d.id
+                        LEFT JOIN employees m ON e.manager_id = m.id`;
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
-                
+                console.log("====================================================================================");
+                console.log(`                                        EMPLOYEES                                   `);
+                console.log("====================================================================================");
                 console.table(results);
                 process.exit(0);
                 
@@ -127,8 +128,7 @@
                                 departments.name AS 'Department', 
                                 roles.salary AS 'Salary'
                             FROM roles JOIN departments 
-                            ON roles.department_id = departments.id;
-        `
+                            ON roles.department_id = departments.id`
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
