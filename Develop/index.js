@@ -149,41 +149,35 @@
     // Add Department Function -----------------------
 
         function addDepartment() {
-                inquirer
-                .prompt([
-                    
-                        {
-                            type: 'input',
-                            name: 'departmentName',
-                            message: 'Enter the name of the department:'
-                        }
-                ])
 
-                .then((answers) => {
-                    const { departmentName } = answers;
+            inquirer.prompt([
                 
+                {
+                    type: 'input',
+                    name: 'departmentName',
+                    message: 'Enter the name of the department: ',
+                },
+            ])
 
+            .then((answers) => {
+                const {departmentName} = answers;
+                const query = `INSERT INTO departments (name)
+                                VALUES (?)`;
 
-                    const query = `INSERT INTO departments (name)
-                                    VALUES (?)`;
-
-
-                    db.query(query, function (err, results) {
-                        if (err) {
-                            console.error('Error occurred:', err);
-                            return;
-                        }
-                        console.log('Department added successfully!');
-                        process.exit(0);
-                    });
-                
-                })
-
-                .catch((error) => {
-                    console.error('Error occurred:', error);
+                db.query(query, [departmentName], function (err, results) {
+                    if (err) {
+                        console.error('Error occurred:', err);
+                        return;
+                    }
+                    console.log('Department added successfully!');
+                    process.exit(0);
                 });
-         }
-                
+            })
+
+            .catch((error) => {
+                console.error('Error occurred:', error);
+            });
+        }                
                 
                 
         
