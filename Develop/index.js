@@ -66,13 +66,7 @@
             
         };
 
-        // function formatResultsForTable(results) {
-        //     let formattedResults = {};
-        //     results.forEach((row, index) => {
-        //         formattedResults[`index `] = row;
-        //     });
-        //     return formattedResults;
-        // }
+
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
@@ -83,30 +77,9 @@
                     return;
                 }
 
-                // results.forEach(row => {
-                //     console.log(JSON.stringify(row));
-                //   });
-
-                // let arrNoIndex = results.reduce((acc, row, index) => {
-                //     acc[index] = row;
-                //      return acc;
-                //   }, {});
-                //        console.table(arrNoIndex);
-
-                // console.table(results);
-
-                // let formattedResults = formatResultsForTable(results);
-                // console.table(formattedResults);
-                
-
-                // console.log(results);
                 console.table(results);
-             process.exit(0);
-                
+                process.exit(0);
 
-                // results.forEach((row, index) => {
-                //     console.table(`Department ${index + 1}:`, row);
-                // });
             });
             
         }
@@ -143,6 +116,18 @@
     // Add Department Function -----------------------
 
         function addDepartment() {
+
+        //     db.query('UPDATE * FROM departments', function (err, results) {
+        //         if (err) {
+        //             console.error('Error occurred:', err);
+        //             return;
+        //         }
+        //         console.table(results);
+        //         process.exit(0);
+        //     });
+        // }
+
+
             // db.promise().query('SELECT * FROM departments')
             // .then( ([rows,fields]) => {
             //   console.log(rows);
@@ -173,12 +158,12 @@
                     name: 'lastName',
                     message: "What is the employee's last name?",
                 },
-                // {
-                //     type: 'list',
-                //     name: 'role',
-                //     message: "What is the employee's role?",
-                //     choices: roleChoices,
-                // },
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: "What is the employee's role?",
+                    choices: roleChoices,
+                },
                 // {
                 //     type: 'list',
                 //     name: 'manager',
