@@ -70,13 +70,18 @@
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
-            const query = `SELECT name FROM departments`;
+            const query = `SELECT 
+                                d.id AS 'ID',
+                                d.name AS 'Name'
+                            FROM departments d`;
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
-
+                console.log("=========================");
+                console.log(`       DEPARTMENTS       `);
+                console.log("=========================");
                 console.table(results);
                 process.exit(0);
 
@@ -87,12 +92,25 @@
     // View All Employees Function -----------------------
 
         function viewAllEmployees() {
-            const query = `SELECT * FROM employees`;
+            const query = `SELECT 
+            e.id AS 'Employee ID', 
+            e.first_name AS 'First Name', 
+            e.last_name AS 'Last Name', 
+            r.title AS 'Job Title', 
+            d.name AS 'Department', 
+            r.salary AS 'Salary',
+            CONCAT(m.first_name, ' ', m.last_name) AS 'Manager'
+        FROM employees e
+        JOIN roles r ON e.role_id = r.id
+        JOIN departments d ON r.department_id = d.id
+        LEFT JOIN employees m ON e.manager_id = m.id;
+        `;
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
+                
                 console.table(results);
                 process.exit(0);
                 
@@ -103,11 +121,22 @@
     // View All Roles Function -----------------------
 
         function viewAllRoles() {
-            db.query('SELECT * FROM roles', function (err, results) {
+            const query = `SELECT 
+                                roles.id AS 'Role ID', 
+                                roles.title AS 'Job Title', 
+                                departments.name AS 'Department', 
+                                roles.salary AS 'Salary'
+                            FROM roles JOIN departments 
+                            ON roles.department_id = departments.id;
+        `
+            db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.log("=================================================");
+                console.log(`                    ROLES                        `)
+                console.log("=================================================");
                 console.table(results);
                 process.exit(0);
             });
