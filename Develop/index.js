@@ -202,6 +202,10 @@
                 'Sales Lead': 1,
                 'Sales Person': 2
             }; 
+
+            // const managerChoices = {
+            //     ''
+            // }
  
 
             inquirer.prompt([
