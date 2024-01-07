@@ -1,26 +1,9 @@
 // DEPENDENCIES _______________________________________
 
     const inquirer = require('inquirer');
-    const mysql = require('mysql2');
-
-// CONNECT TO DATABASE ___________________________________    
-
-    // Connect to database
-    const db = mysql.createConnection(
-        {
-            host: 'localhost',
-            user: 'root',
-            password: 'rootroot',
-            database: 'employee_tracker_db',
-            
-        },
-        console.log(`Connected to the employee_tracker_db database.`)
-        );
-
-        
-        // db.query('SELECT * FROM departments', function (err, results) {
-        //     console.log(results);
-        //     });
+    // const mysql = require('mysql2');
+    const db = require('./config/connection');
+    require('console.table'); // to printout that looks like mysql
 
 
 // MAIN PROMPT QUESTIONS __________________________________
@@ -83,47 +66,26 @@
             
         };
 
-        // function formatResultsForTable(results) {
-        //     let formattedResults = {};
-        //     results.forEach((row, index) => {
-        //         formattedResults[`index `] = row;
-        //     });
-        //     return formattedResults;
-        // }
+
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
-            const query = `SELECT name FROM departments`;
+            const query = `SELECT 
+                                d.id AS 'ID',
+                                d.name AS 'Name'
+                            FROM departments d`;
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
-
-                // results.forEach(row => {
-                //     console.log(JSON.stringify(row));
-                //   });
-
-                // let arrNoIndex = results.reduce((acc, row, index) => {
-                //     acc[index] = row;
-                //      return acc;
-                //   }, {});
-                //        console.table(arrNoIndex);
-
-                // console.table(results);
-
-                // let formattedResults = formatResultsForTable(results);
-                // console.table(formattedResults);
-                
-
-                // console.log(results);
+                console.log(`                         `);
+                console.log("=========================");
+                console.log(`       DEPARTMENTS       `);
+                console.log("=========================");
                 console.table(results);
-             process.exit(0);
-                
+                process.exit(0);
 
-                // results.forEach((row, index) => {
-                //     console.table(`Department ${index + 1}:`, row);
-                // });
             });
             
         }
@@ -131,12 +93,29 @@
     // View All Employees Function -----------------------
 
         function viewAllEmployees() {
-            const query = `SELECT * FROM employees`;
+            const query = `SELECT 
+                                e.id AS 'Employee ID', 
+                                e.first_name AS 'First Name', 
+                                e.last_name AS 'Last Name', 
+                                r.title AS 'Job Title', 
+                                d.name AS 'Department', 
+                                r.salary AS 'Salary',
+                                CONCAT(m.first_name, ' ', m.last_name) AS 'Manager'
+                           FROM employees e
+                           LEFT JOIN roles r ON e.role_id = r.id
+                           LEFT JOIN departments d ON r.department_id = d.id
+                           LEFT JOIN employees m ON e.manager_id = m.id
+                           ORDER BY  e.id`;
+
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.log(`                                                                                              `);
+                console.log("==============================================================================================");
+                console.log(`                                            EMPLOYEES                                         `);
+                console.log("==============================================================================================");
                 console.table(results);
                 process.exit(0);
                 
@@ -147,11 +126,21 @@
     // View All Roles Function -----------------------
 
         function viewAllRoles() {
-            db.query('SELECT * FROM roles', function (err, results) {
+            const query = `SELECT 
+                                roles.id AS 'Role ID', 
+                                roles.title AS 'Job Title', 
+                                departments.name AS 'Department', 
+                                roles.salary AS 'Salary'
+                           FROM roles JOIN departments 
+                           ON roles.department_id = departments.id`
+            db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.log("=================================================");
+                console.log(`                    ROLES                        `)
+                console.log("=================================================");
                 console.table(results);
                 process.exit(0);
             });
@@ -160,6 +149,18 @@
     // Add Department Function -----------------------
 
         function addDepartment() {
+
+        //     db.query('UPDATE * FROM departments', function (err, results) {
+        //         if (err) {
+        //             console.error('Error occurred:', err);
+        //             return;
+        //         }
+        //         console.table(results);
+        //         process.exit(0);
+        //     });
+        // }
+
+
             // db.promise().query('SELECT * FROM departments')
             // .then( ([rows,fields]) => {
             //   console.log(rows);
@@ -190,19 +191,20 @@
                     name: 'lastName',
                     message: "What is the employee's last name?",
                 },
-                // {
-                //     type: 'list',
-                //     name: 'role',
-                //     message: "What is the employee's role?",
-                //     choices: roleChoices,
-                // },
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: "What is the employee's role?",
+                    choices: roleChoices,
+                },
                 // {
                 //     type: 'list',
                 //     name: 'manager',
                 //     message: "Who is the employee's manager?",
                 //     choices: managerChoices,
                 // }
-            ]).then((answers) => {
+            ])
+            .then((answers) => {
                 // Insert the new employee into the database
                 const { firstName, lastName, role, manager } = answers;
 

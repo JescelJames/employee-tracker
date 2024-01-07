@@ -74,6 +74,7 @@
                                 d.id AS 'ID',
                                 d.name AS 'Name'
                             FROM departments d`;
+                            
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
@@ -131,8 +132,8 @@
                                 roles.title AS 'Job Title', 
                                 departments.name AS 'Department', 
                                 roles.salary AS 'Salary'
-                            FROM roles JOIN departments 
-                            ON roles.department_id = departments.id`
+                           FROM roles JOIN departments 
+                           ON roles.department_id = departments.id`
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
@@ -150,25 +151,40 @@
 
         function addDepartment() {
 
-        //     db.query('UPDATE * FROM departments', function (err, results) {
-        //         if (err) {
-        //             console.error('Error occurred:', err);
-        //             return;
-        //         }
-        //         console.table(results);
-        //         process.exit(0);
-        //     });
-        // }
+            inquirer.prompt([
+                
+                {
+                    type: 'input',
+                    name: 'departmentName',
+                    message: 'Enter the name of the department: ',
+                },
+            ])
+
+            .then((answers) => {
+                const {departmentName} = answers;
+                const query = `INSERT INTO departments (name)
+                                VALUES (?)`;
+
+                db.query(query, [departmentName], function (err, results) {
+                    if (err) {
+                        console.error('Error occurred:', err);
+                        return;
+                    }
+                    console.log('Department added successfully!');
+                    process.exit(0);
+                });
+            })
+
+            .catch((error) => {
+                console.error('Error occurred:', error);
+            });
+        }                
+                
+                
+        
 
 
-            // db.promise().query('SELECT * FROM departments')
-            // .then( ([rows,fields]) => {
-            //   console.log(rows);
-            // })
-            // .catch(console.log)
-            // .then( () => db.end());
-
-        }
+        
 
 
     // Add Employee Function -----------------------
