@@ -181,7 +181,11 @@
                         console.error('Error occurred:', err);
                         return;
                     }
-                    console.log('Department added successfully!');
+                    // console.clear();
+                    console.log("__________________________________________________");
+                    console.log(`      ${departmentName} Department added successfully! `)
+                    console.log("__________________________________________________");
+                    console.log('');
                     process.exit(0);
                 });
             })
@@ -200,9 +204,21 @@
 
             const roleChoices = {
                 'Sales Lead': 1,
-                'Sales Person': 2
+                'Sales Person': 2,
+                'Lead Engineer': 3,
+                'Software Engineer': 4,
+                'Account Manager': 5,
+                'Accountant': 6,
+                'Legal Team Lead': 7,
+                'Lawyer': 8,
             }; 
-
+            const managerChoices = {
+                'Sales Lead': 1,
+                'Lead Engineer': 3,
+                'Account Manager': 5,
+                'Legal Team Lead': 7,
+                'None': null,
+            }
             // const managerChoices = {
             //     ''
             // }
@@ -225,19 +241,26 @@
                     message: "What is the employee's role?",
                     choices: Object.keys(roleChoices),
                 },
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: "Who is the manager for this employee?",
+                    choices: Object.keys(managerChoices),
+                },
 
             ])
             .then((answers) => {
 
-                const { firstName, lastName, role } = answers;
+                const { firstName, lastName, role, manager } = answers;
 
                 const roleId = roleChoices[role];
+                const managerId = managerChoices[manager]
                 
-                const query = `INSERT INTO employees (first_name, last_name, role_id)
-                                VALUES (?, ?, ?)`;
+                const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                                VALUES (?, ?, ?, ?)`;
 
 
-                    db.query(query, [firstName, lastName, roleId], (err, results) => {
+                    db.query(query, [firstName, lastName, roleId, managerId], (err, results) => {
                         
                         if (err) {
                             console.error('Error occurred:', err);
