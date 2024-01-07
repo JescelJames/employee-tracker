@@ -196,10 +196,17 @@
 
 
         function addEmployee() {
-            // Assuming you have roles and managers in your database
-            // You might need to fetch these lists from your database first
-            const roleChoices = ['Sales Lead', 'Sales Person']; // Replace with actual roles
-            const managerChoices = ['Manager 1', 'Manager 2', 'None']; // Replace with actual managers
+            const db = require('./config/connection');
+
+            const roleChoices = {
+                'Sales Lead': 1,
+                'Sales Person': 2
+            }; 
+
+            // const managerChoices = {
+            //     ''
+            // }
+ 
 
             inquirer.prompt([
                 {
@@ -216,46 +223,48 @@
                     type: 'list',
                     name: 'role',
                     message: "What is the employee's role?",
-                    choices: roleChoices,
+                    choices: Object.keys(roleChoices),
                 },
-                // {
-                //     type: 'list',
-                //     name: 'manager',
-                //     message: "Who is the employee's manager?",
-                //     choices: managerChoices,
-                // }
-            ]).then((answers) => {
-                // Insert the new employee into the database
+
+            ])
+            .then((answers) => {
+
                 const { firstName, lastName, role } = answers;
 
-                // Prepare your SQL query based on your database schema
-                // Here's an example assuming you have a table `employees`
-                // with columns `first_name`, `last_name`, `role_id`, and `manager_id`
-                // Replace '1' and '2' with actual role_id and manager_id based on user selection
+                const roleId = roleChoices[role];
+                
+                const query = `INSERT INTO employees (first_name, last_name, role_id)
+                                VALUES (?, ?, ?)`;
 
-                // const query = `
-                //     INSERT INTO employees (first_name, last_name, role_id, manager_id)
-                //     VALUES (?, ?, ?, ?)
-                // `;
-                const query = `
-                    INSERT INTO employees (first_name, last_name, role_id)
-                    VALUES (?, ?, ?)    
-                `;
 
-                // db.query(query, [firstName, lastName, 1 /* role id */, 2 /* manager id */], (err, results) => {
-                    db.query(query, [firstName, lastName, role], (err, results) => {
-                    
-                    if (err) {
-                        console.error('Error occurred:', err);
-                        return;
-                    }
+                    db.query(query, [firstName, lastName, roleId], (err, results) => {
+                        
+                        if (err) {
+                            console.error('Error occurred:', err);
+                            return;
+                        }
+
                     console.log('Employee added successfully!');
                     process.exit(0);
                 });
-            }).catch((error) => {
+            })
+            
+            .catch((error) => {
                 console.error('Error occurred:', error);
             });
+
+
+
+
         }
+
+
+
+
+
+
+
+
 
 
     // Add Role Function -----------------------
