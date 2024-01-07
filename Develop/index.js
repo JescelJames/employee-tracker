@@ -74,6 +74,7 @@
                                 d.id AS 'ID',
                                 d.name AS 'Name'
                             FROM departments d`;
+                            
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
