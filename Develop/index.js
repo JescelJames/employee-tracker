@@ -251,30 +251,48 @@
 
         function addRole() {
 
+            const departmentChoices = []
+
             inquirer.prompt([
                 {
                     type: 'input',
-                    name: 'roleTitle',
-                    message: 'Enter the title of the role: ',
+                    name: 'newRoleTitle',
+                    message: 'Enter the title of this new role: ',
+                    validate: (title) => {
+                        if (!title) {
+                            console.log('Please enter a title for this role')
+                        }
+                        return true;
+                    },
                 },
                 {
                     type: 'input',
-                    name: 'roleSalary',
+                    name: 'newRoleSalary',
                     message: 'Enter the salary of the role: ',
+                    validate: (salary) => {
+                        if (!salary) {
+                            console.log('Please enter the annual salary for this role')
+                        }
+                        return true;
+                    },
                 },
-                {
-                    type: 'input',
-                    name: 'roleSalary',
-                    message: 'Enter the salary of the role: ',
-                },
+                // {
+                //     type: 'input',
+                //     name: 'departmentName',
+                //     message: 'Enter the Department Name: ',
+                // },
             ])
 
             .then((answers) => {
-                const { roleTitle, roleSalary } = answers;
+                const { newRoleTitle, newRoleSalary } = answers;
                 const query = `INSERT INTO roles (title, salary)
                                 VALUES (?, ?)`;
+                // const { newRoleTitle, newRoleSalary, departmentName } = answers;
+                // const query = `INSERT INTO roles (title, salary, department_id)
+                //                 VALUES (?, ?, ?)`;
 
-                db.query(query, [roleTitle, roleSalary], function (err, results) {
+                db.query(query, [newRoleTitle, newRoleSalary], function (err, results) {
+                // db.query(query, [newRoleTitle, newRoleSalary,], function (err, results) {
                     if (err) {
                         console.error('Error occurred:', err);
                         return;
