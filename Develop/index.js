@@ -79,6 +79,7 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.log(`                         `);
                 console.log("=========================");
                 console.log(`       DEPARTMENTS       `);
                 console.log("=========================");
@@ -100,18 +101,21 @@
                                 d.name AS 'Department', 
                                 r.salary AS 'Salary',
                                 CONCAT(m.first_name, ' ', m.last_name) AS 'Manager'
-                        FROM employees e
-                        JOIN roles r ON e.role_id = r.id
-                        JOIN departments d ON r.department_id = d.id
-                        LEFT JOIN employees m ON e.manager_id = m.id`;
+                           FROM employees e
+                           LEFT JOIN roles r ON e.role_id = r.id
+                           LEFT JOIN departments d ON r.department_id = d.id
+                           LEFT JOIN employees m ON e.manager_id = m.id
+                           ORDER BY  e.id`;
+
             db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
                 }
-                console.log("====================================================================================");
-                console.log(`                                        EMPLOYEES                                   `);
-                console.log("====================================================================================");
+                console.log(`                                                                                              `);
+                console.log("==============================================================================================");
+                console.log(`                                            EMPLOYEES                                         `);
+                console.log("==============================================================================================");
                 console.table(results);
                 process.exit(0);
                 
