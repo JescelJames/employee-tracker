@@ -134,7 +134,9 @@
                     console.error('Error occurred:', err);
                     return;
                 }
-                console.log("=================================================")
+                console.log("=================================================");
+                console.log(`                    ROLES                        `)
+                console.log("=================================================");
                 console.table(results);
                 process.exit(0);
             });
