@@ -360,22 +360,22 @@
             });
 
         };
-                function getDepartmentId(departmentName, callback) {
-                    const query = `SELECT id FROM departments WHERE name = ?`;
-                    db.query(query, [departmentName], function (err, results) {
-                        if (err) {
-                            console.error('Error occurred:', err);
-                            return callback(null);
-                        }
-                        if (results.length > 0) {
-                            const departmentId = results[0].id;
-                            return callback(departmentId);
-                        } else {
-                            console.log('Department not found');
-                            return callback(null);
-                        }
-                    });
-                }
+                // function getDepartmentId(departmentName, callback) {
+                //     const query = `SELECT id FROM departments WHERE name = ?`;
+                //     db.query(query, [departmentName], function (err, results) {
+                //         if (err) {
+                //             console.error('Error occurred:', err);
+                //             return callback(null);
+                //         }
+                //         if (results.length > 0) {
+                //             const departmentId = results[0].id;
+                //             return callback(departmentId);
+                //         } else {
+                //             console.log('Department not found');
+                //             return callback(null);
+                //         }
+                //     });
+                // }
 
 
 
