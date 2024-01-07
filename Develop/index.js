@@ -249,7 +249,36 @@
 
     // Add Role Function -----------------------
 
-        function addRole() {}
+        function addRole() {
+
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'roleTitle',
+                    message: 'Enter the title of the role: ',
+                },
+            ])
+
+            .then((answers) => {
+                const {roleTitle} = answers;
+                const query = `INSERT INTO roles (title)
+                                VALUES (?)`;
+
+                db.query(query, [roleTitle], function (err, results) {
+                    if (err) {
+                        console.error('Error occurred:', err);
+                        return;
+                    }
+                    console.log('Role added successfully!');
+                    process.exit(0);
+                });
+            })
+
+            .catch((error) => {
+                console.error('Error occurred:', error);
+            });
+
+        };
 
 
     // Update Employee Role Function -----------------------
