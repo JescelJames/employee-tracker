@@ -103,7 +103,15 @@
     // View All Roles Function -----------------------
 
         function viewAllRoles() {
-            db.query('SELECT * FROM roles', function (err, results) {
+            const query = `SELECT 
+            roles.id AS 'Role ID', 
+            roles.title AS 'Job Title', 
+            departments.name AS 'Department', 
+            roles.salary AS 'Salary'
+        FROM roles
+        JOIN departments ON roles.department_id = departments.id;
+        `
+            db.query(query, function (err, results) {
                 if (err) {
                     console.error('Error occurred:', err);
                     return;
