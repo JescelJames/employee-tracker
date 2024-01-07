@@ -8,6 +8,7 @@
 
 // MAIN PROMPT QUESTIONS __________________________________
     const questions = [
+        
         {
             type: 'list',
             message: 'What would you like to do?',
@@ -30,6 +31,9 @@
     //Initilize Function ----------------------------------
 
         function init() {
+        
+        //    console.clear();
+
             inquirer.prompt(questions)
                 .then((answer) => {
 
@@ -70,6 +74,8 @@
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
+            
+
             const query = `SELECT 
                                 d.id AS 'ID',
                                 d.name AS 'Name'
@@ -80,20 +86,22 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.clear();
                 console.log(`                         `);
                 console.log("=========================");
                 console.log(`       DEPARTMENTS       `);
                 console.log("=========================");
                 console.table(results);
                 process.exit(0);
-
-            });
             
+            });
+
         }
 
     // View All Employees Function -----------------------
 
         function viewAllEmployees() {
+            
             const query = `SELECT 
                                 e.id AS 'Employee ID', 
                                 e.first_name AS 'First Name', 
@@ -113,6 +121,7 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.clear();
                 console.log(`                                                                                              `);
                 console.log("==============================================================================================");
                 console.log(`                                            EMPLOYEES                                         `);
@@ -127,6 +136,7 @@
     // View All Roles Function -----------------------
 
         function viewAllRoles() {
+
             const query = `SELECT 
                                 roles.id AS 'Role ID', 
                                 roles.title AS 'Job Title', 
@@ -139,6 +149,7 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.clear();
                 console.log("=================================================");
                 console.log(`                    ROLES                        `)
                 console.log("=================================================");
@@ -179,21 +190,15 @@
                 console.error('Error occurred:', error);
             });
         }                
-                
-                
+    
         
-
-
-        
-
-
     // Add Employee Function -----------------------
 
 
         function addEmployee() {
             // Assuming you have roles and managers in your database
             // You might need to fetch these lists from your database first
-            const roleChoices = ['first_name', 'last_name']; // Replace with actual roles
+            const roleChoices = ['Sales Lead', 'Sales Person']; // Replace with actual roles
             const managerChoices = ['Manager 1', 'Manager 2', 'None']; // Replace with actual managers
 
             inquirer.prompt([
@@ -221,7 +226,7 @@
                 // }
             ]).then((answers) => {
                 // Insert the new employee into the database
-                const { firstName, lastName, role, manager } = answers;
+                const { firstName, lastName, role } = answers;
 
                 // Prepare your SQL query based on your database schema
                 // Here's an example assuming you have a table `employees`
@@ -233,12 +238,12 @@
                 //     VALUES (?, ?, ?, ?)
                 // `;
                 const query = `
-                    INSERT INTO employees (first_name, last_name)
-                    VALUES (?, ?)    
+                    INSERT INTO employees (first_name, last_name, role_id)
+                    VALUES (?, ?, ?)    
                 `;
 
                 // db.query(query, [firstName, lastName, 1 /* role id */, 2 /* manager id */], (err, results) => {
-                    db.query(query, [firstName, lastName], (err, results) => {
+                    db.query(query, [firstName, lastName, role], (err, results) => {
                     
                     if (err) {
                         console.error('Error occurred:', err);
@@ -255,7 +260,86 @@
 
     // Add Role Function -----------------------
 
-        function addRole() {}
+        function addRole() {
+
+            const departmentChoices = []
+
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'newRoleTitle',
+                    message: 'Enter the title of this new role: ',
+                    validate: (title) => {
+                        if (!title) {
+                            console.log('Please enter a title for this role')
+                        }
+                        return true;
+                    },
+                },
+                {
+                    type: 'input',
+                    name: 'newRoleSalary',
+                    message: 'Enter the salary of the role: ',
+                    validate: (salary) => {
+                        if (!salary) {
+                            console.log('Please enter the annual salary for this role')
+                        }
+                        return true;
+                    },
+                },
+                {
+                    type: 'list',
+                    name: 'departmentName',
+                    message: 'Enter the Department Name: ',
+                    choices: departmentChoices,
+                },
+            ])
+
+            .then((answers) => {
+                
+
+
+                const query = `INSERT INTO roles (title, salary, department_id)
+                                VALUES (?, ?, ?)`;
+
+                const { newRoleTitle, newRoleSalary, departmentName } = answers;                
+                // const { newRoleTitle, newRoleSalary, departmentName } = answers;
+                // const query = `INSERT INTO roles (title, salary, department_id)
+                //                 VALUES (?, ?, ?)`;
+                getDepartmentId(departmentName, (departmentId) => {
+                    db.query(query, [newRoleTitle, newRoleSalary, departmentName], function (err, results) {
+                    // db.query(query, [newRoleTitle, newRoleSalary,], function (err, results) {
+                        if (err) {
+                            console.error('Error occurred:', err);
+                            return;
+                        }
+                        console.log('Role added successfully!');
+                        process.exit(0);
+                    });
+                })
+            })
+
+            .catch((error) => {
+                console.error('Error occurred:', error);
+            });
+
+        };
+                function getDepartmentId(departmentName, callback) {
+                    const query = `SELECT id FROM departments WHERE name = ?`;
+                    db.query(query, [departmentName], function (err, results) {
+                        if (err) {
+                            console.error('Error occurred:', err);
+                            return callback(null);
+                        }
+                        if (results.length > 0) {
+                            const departmentId = results[0].id;
+                            return callback(departmentId);
+                        } else {
+                            console.log('Department not found');
+                            return callback(null);
+                        }
+                    });
+                }
 
 
     // Update Employee Role Function -----------------------
