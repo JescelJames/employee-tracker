@@ -3,11 +3,12 @@
     const inquirer = require('inquirer');
     // const mysql = require('mysql2');
     const db = require('./config/connection');
-    require('console.table'); // to printout that looks like mysql
+    require('console.table'); 
 
 
 // MAIN PROMPT QUESTIONS __________________________________
     const questions = [
+        
         {
             type: 'list',
             message: 'What would you like to do?',
@@ -30,11 +31,15 @@
     //Initilize Function ----------------------------------
 
         function init() {
+        
+        //    console.clear();
+
             inquirer.prompt(questions)
                 .then((answer) => {
 
                     switch (answer.action) {
                         case 'View All Departments':
+                            console.clear();
                             viewAllDepartments();
                             break;
                         case 'View All Employees':
@@ -70,6 +75,8 @@
     // View  All Department Function ------------------------------
     
         function viewAllDepartments() {
+            
+
             const query = `SELECT 
                                 d.id AS 'ID',
                                 d.name AS 'Name'
@@ -80,20 +87,22 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.clear();
                 console.log(`                         `);
                 console.log("=========================");
                 console.log(`       DEPARTMENTS       `);
                 console.log("=========================");
                 console.table(results);
                 process.exit(0);
-
-            });
             
+            });
+
         }
 
     // View All Employees Function -----------------------
 
         function viewAllEmployees() {
+            
             const query = `SELECT 
                                 e.id AS 'Employee ID', 
                                 e.first_name AS 'First Name', 
@@ -113,6 +122,7 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.clear();
                 console.log(`                                                                                              `);
                 console.log("==============================================================================================");
                 console.log(`                                            EMPLOYEES                                         `);
@@ -127,6 +137,7 @@
     // View All Roles Function -----------------------
 
         function viewAllRoles() {
+
             const query = `SELECT 
                                 roles.id AS 'Role ID', 
                                 roles.title AS 'Job Title', 
@@ -139,6 +150,7 @@
                     console.error('Error occurred:', err);
                     return;
                 }
+                console.clear();
                 console.log("=================================================");
                 console.log(`                    ROLES                        `)
                 console.log("=================================================");
@@ -170,7 +182,11 @@
                         console.error('Error occurred:', err);
                         return;
                     }
-                    console.log('Department added successfully!');
+                    // console.clear();
+                    console.log("__________________________________________________");
+                    console.log(`      ${departmentName} Department added successfully! `)
+                    console.log("__________________________________________________");
+                    console.log('');
                     process.exit(0);
                 });
             })
@@ -185,10 +201,45 @@
 
 
         function addEmployee() {
-            // Assuming you have roles and managers in your database
-            // You might need to fetch these lists from your database first
-            const roleChoices = ['first_name', 'last_name']; // Replace with actual roles
-            const managerChoices = ['Manager 1', 'Manager 2', 'None']; // Replace with actual managers
+            const db = require('./config/connection');
+
+            const queryAllRoles = `SELECT title FROM roles`
+            db.query(queryAllRoles, (err, roles) => {
+
+                if (err) throw err;
+                inquirer.prompt([
+  
+                    {
+                        type: 'list',
+                        name: 'role',
+                        message: "What is the employee's role?",
+                        choices: roles.map(role => ({ name: role.title, value: role.id }))
+                            
+                    },
+
+    
+                ])
+
+            })
+
+
+            const roleChoices = {
+                'Sales Lead': 1,
+                'Sales Person': 2,
+                'Lead Engineer': 3,
+                'Software Engineer': 4,
+                'Account Manager': 5,
+                'Accountant': 6,
+                'Legal Team Lead': 7,
+                'Lawyer': 8,
+            }; 
+            const managerChoices = {
+                'Sales Lead': 1,
+                'Lead Engineer': 3,
+                'Account Manager': 5,
+                'Legal Team Lead': 7,
+                'None': null,
+            }
 
             inquirer.prompt([
                 {
@@ -205,56 +256,176 @@
                     type: 'list',
                     name: 'role',
                     message: "What is the employee's role?",
-                    choices: roleChoices,
+                    choices: Object.keys(roleChoices),
                 },
-                // {
-                //     type: 'list',
-                //     name: 'manager',
-                //     message: "Who is the employee's manager?",
-                //     choices: managerChoices,
-                // }
-            ]).then((answers) => {
-                // Insert the new employee into the database
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: "Who is the manager for this employee?",
+                    choices: Object.keys(managerChoices),
+                },
+
+            ])
+            .then((answers) => {
+
                 const { firstName, lastName, role, manager } = answers;
 
-                // Prepare your SQL query based on your database schema
-                // Here's an example assuming you have a table `employees`
-                // with columns `first_name`, `last_name`, `role_id`, and `manager_id`
-                // Replace '1' and '2' with actual role_id and manager_id based on user selection
+                const roleId = roleChoices[role];
+                const managerId = managerChoices[manager];
+                
+                const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                                VALUES (?, ?, ?, ?)`;
 
-                // const query = `
-                //     INSERT INTO employees (first_name, last_name, role_id, manager_id)
-                //     VALUES (?, ?, ?, ?)
-                // `;
-                const query = `
-                    INSERT INTO employees (first_name, last_name)
-                    VALUES (?, ?)    
-                `;
 
-                // db.query(query, [firstName, lastName, 1 /* role id */, 2 /* manager id */], (err, results) => {
-                    db.query(query, [firstName, lastName], (err, results) => {
-                    
-                    if (err) {
-                        console.error('Error occurred:', err);
-                        return;
-                    }
-                    console.log('Employee added successfully!');
+                    db.query(query, [firstName, lastName, roleId, managerId], (err, results) => {
+                        
+                        if (err) {
+                            console.error('Error occurred:', err);
+                            return;
+                        }
+                        console.log("__________________________________________________");
+                        console.log(`      ${firstName} ${lastName} added successfully! `);
+                        console.log("__________________________________________________");
+                    // console.log('Employee added successfully!');
                     process.exit(0);
                 });
-            }).catch((error) => {
+            })
+            
+            .catch((error) => {
                 console.error('Error occurred:', error);
             });
+
         }
 
 
     // Add Role Function -----------------------
 
-        function addRole() {}
+        function addRole() {
+            const db = require('./config/connection');
+
+            const departmentChoices = {
+                'Engineering': 1,
+                'Finance': 2,
+                'Legal': 3,
+                'Sales': 4,
+            }
+
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'newRoleTitle',
+                    message: 'Enter the title of this new role: ',
+                    validate: (title) => {
+                        if (!title) {
+                            console.log('Please enter a title for this role')
+                        }
+                        return true;
+                    },
+                },
+                {
+                    type: 'input',
+                    name: 'newRoleSalary',
+                    message: 'Enter the salary of the role: ',
+                    validate: (salary) => {
+                        if (!salary) {
+                            console.log('Please enter the annual salary for this role')
+                        }
+                        return true;
+                    },
+                },
+                {
+                    type: 'list',
+                    name: 'departmentName',
+                    message: 'Enter the Department Name: ',
+                    choices: Object.keys(departmentChoices),
+                },
+            ])
+
+            .then((answers) => {
+                
+                const { newRoleTitle, newRoleSalary, departmentName } = answers;    
+
+                const departmentId = departmentChoices[departmentName];
+
+                const query = `INSERT INTO roles (title, salary, department_id)
+                                VALUES (?, ?, ?)`;
+
+                db.query(query, [newRoleTitle, newRoleSalary, departmentId], function (err) {
+                
+                    if (err) {
+                        console.error('Error occurred:', err);
+                        return;
+                    }
+                    console.log('Role added successfully!');
+                    process.exit(0);
+                });
+                
+            })
+
+            .catch((error) => {
+                console.error('Error occurred:', error);
+            });
+
+        };
+
+
 
 
     // Update Employee Role Function -----------------------
+        
+        function updateEmployeeRole() {
 
-       function updateEmployeeRole() {}
+            const queryEmployee = `SELECT id, CONCAT(first_name, " ", last_name) AS name FROM employees`
+
+            db.query(queryEmployee, (err, employees) => {
+                if (err) throw err;
+        
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'employeeId',
+                        message: 'Which employee do you want to update?',
+                        choices: employees.map(employee => ({ name: employee.name, value: employee.id }))
+                    }
+                ])
+                .then(({ employeeId }) => {
+
+                    const queryNewRole = `SELECT id, title FROM roles`
+                    
+                    db.query(queryNewRole, (err, roles) => {
+                        if (err) throw err;
+
+                        inquirer.prompt([
+                            {
+                                type: 'list',
+                                name: 'roleId',
+                                message: 'What is the new role?',
+                                choices: roles.map(role => ({ name: role.title, value: role.id }))
+                            }
+                        ]).then(({ roleId }) => {
+                            
+                            const queryUpdateRole = `UPDATE employees SET role_id = ? WHERE id = ?`
+
+                            db.query(queryUpdateRole, [roleId, employeeId], (err) => {
+                                if (err) throw err;
+                                console.clear();
+                                console.log("__________________________________________________");
+                                console.log(`      Employee's role updated successfully!`       );
+                                console.log("__________________________________________________");
+                                
+                                process.exit(0);
+                            });
+                            
+                        });
+
+                    });
+
+                });
+
+            });
+            
+        }
+        
        
     //______________________________________
        

@@ -198,29 +198,25 @@
     
         
     // Add Employee Function -----------------------
-
-
-        function addEmployee() {
-            const db = require('./config/connection');
-
-            const roleChoices = {
-                'Sales Lead': 1,
-                'Sales Person': 2,
-                'Lead Engineer': 3,
-                'Software Engineer': 4,
-                'Account Manager': 5,
-                'Accountant': 6,
-                'Legal Team Lead': 7,
-                'Lawyer': 8,
-            }; 
+   
+    function addEmployee() {
+        const db = require('./config/connection');
+    
+        // Query to get all roles
+        const queryAllRoles = `SELECT id, title FROM roles`;
+        db.query(queryAllRoles, (err, roles) => {
+            if (err) throw err;
+    
+            // Manager choices
             const managerChoices = {
                 'Sales Lead': 1,
                 'Lead Engineer': 3,
                 'Account Manager': 5,
                 'Legal Team Lead': 7,
                 'None': null,
-            }
-
+            };
+    
+            // Prompt for employee details
             inquirer.prompt([
                 {
                     type: 'input',
@@ -236,47 +232,41 @@
                     type: 'list',
                     name: 'role',
                     message: "What is the employee's role?",
-                    choices: Object.keys(roleChoices),
+                    choices: roles.map(role => role.title)
                 },
                 {
                     type: 'list',
                     name: 'manager',
                     message: "Who is the manager for this employee?",
                     choices: Object.keys(managerChoices),
-                },
-
-            ])
-            .then((answers) => {
-
+                }
+            ]).then((answers) => {
                 const { firstName, lastName, role, manager } = answers;
-
-                const roleId = roleChoices[role];
+    
+                // Find role ID
+                const roleId = roles.find(r => r.title === role).id;
                 const managerId = managerChoices[manager];
-                
-                const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
-                                VALUES (?, ?, ?, ?)`;
-
-
-                    db.query(query, [firstName, lastName, roleId, managerId], (err, results) => {
-                        
-                        if (err) {
-                            console.error('Error occurred:', err);
-                            return;
-                        }
-                        console.log("__________________________________________________");
-                        console.log(`      ${firstName} ${lastName} added successfully! `);
-                        console.log("__________________________________________________");
-                    // console.log('Employee added successfully!');
+    
+                // Insert query
+                const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
+                db.query(query, [firstName, lastName, roleId, managerId], (err) => {
+                    if (err) {
+                        console.error('Error occurred:', err);
+                        return;
+                    }
+                    console.log(``);
+                    console.log("__________________________________________________");
+                    console.log(`        Employee ${firstName} ${lastName} added successfully! `);
+                    console.log("__________________________________________________");
+                    console.log(``);
                     process.exit(0);
                 });
-            })
-            
-            .catch((error) => {
+            }).catch((error) => {
                 console.error('Error occurred:', error);
             });
-
-        }
-
+        });
+    }
+    
 
     // Add Role Function -----------------------
 
