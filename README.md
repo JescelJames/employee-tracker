@@ -10,9 +10,12 @@ This challenge helps view and make changes to the current database for employees
 - Why I took this challege: To learn learn and be comfortable with MySQL.
 - What the challenge solved:  The Employee Tracker can query and make changes in the database
 
+### Video Demonstration
+
+[employee-tracker.webm](https://github.com/JescelJames/employee-tracker/assets/105643185/c37f7b92-5029-4c1f-8b3d-cc62751bdbba)
+
+
 ### Links to the application.
-
-
 
 - Repository Link:  https://github.com/JescelJames/employee-tracker
 
