@@ -342,9 +342,9 @@
                         choices: departments.map(department => ({ name: department.name, value: department.id }))
                     }
                 ]).then((answers) => {
+                    
                     const { newRoleTitle, newRoleSalary, departmentId } = answers;
-        
-                    // Insert query
+                            
                     const query = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
                     db.query(query, [newRoleTitle, newRoleSalary, departmentId], (err) => {
                         if (err) {
