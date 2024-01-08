@@ -1,7 +1,6 @@
 // DEPENDENCIES _______________________________________
 
     const inquirer = require('inquirer');
-    // const mysql = require('mysql2');
     const db = require('./config/connection');
     require('console.table'); 
 
@@ -32,7 +31,6 @@
 
         function init() {
         
-        //    console.clear();
 
             inquirer.prompt(questions)
                 .then((answer) => {
@@ -169,6 +167,12 @@
                     type: 'input',
                     name: 'departmentName',
                     message: 'Enter the name of the department: ',
+                    validate: (name) => {
+                        if(!name) {
+                            return 'Please enter a Department name';
+                        }
+                        return true;
+                    },
                 },
             ])
 
@@ -237,7 +241,7 @@
                 {
                     type: 'list',
                     name: 'manager',
-                    message: "Who is the manager for this employee?",
+                    message: "Select the manager position responsible for this employee?",
                     choices: Object.keys(managerChoices),
                 }
             ]).then((answers) => {
@@ -269,76 +273,63 @@
     
 
     // Add Role Function -----------------------
-
+    
+        
+        
         function addRole() {
-            const db = require('./config/connection');
-
-            const departmentChoices = {
-                'Engineering': 1,
-                'Finance': 2,
-                'Legal': 3,
-                'Sales': 4,
-            }
-
-            inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'newRoleTitle',
-                    message: 'Enter the title of this new role: ',
-                    validate: (title) => {
-                        if (!title) {
-                            console.log('Please enter a title for this role')
-                        }
-                        return true;
+        //    const db = require('./config/connection'); 
+            // Query to get all departments
+            const queryAllDepartments = `SELECT id, name FROM departments`;
+            db.query(queryAllDepartments, (err, departments) => {
+                if (err) throw err;
+        
+                // Prompt for role details
+                inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'newRoleTitle',
+                        message: 'Enter the title of this new role: ',
                     },
-                },
-                {
-                    type: 'input',
-                    name: 'newRoleSalary',
-                    message: 'Enter the salary of the role: ',
-                    validate: (salary) => {
-                        if (!salary) {
-                            console.log('Please enter the annual salary for this role')
-                        }
-                        return true;
+                    {
+                        type: 'input',
+                        name: 'newRoleSalary',
+                        message: 'Enter the salary of the role: ',
+                        validate: (salary) => {
+                            if (!salary || isNaN(salary)) {
+                                console.log('Please enter a valid annual salary for this role');
+                                return false;
+                            }
+                            return true;
+                        },
                     },
-                },
-                {
-                    type: 'list',
-                    name: 'departmentName',
-                    message: 'Enter the Department Name: ',
-                    choices: Object.keys(departmentChoices),
-                },
-            ])
-
-            .then((answers) => {
-                
-                const { newRoleTitle, newRoleSalary, departmentName } = answers;    
-
-                const departmentId = departmentChoices[departmentName];
-
-                const query = `INSERT INTO roles (title, salary, department_id)
-                                VALUES (?, ?, ?)`;
-
-                db.query(query, [newRoleTitle, newRoleSalary, departmentId], function (err) {
-                
-                    if (err) {
-                        console.error('Error occurred:', err);
-                        return;
+                    {
+                        type: 'list',
+                        name: 'departmentId',
+                        message: 'Select the Department:',
+                        choices: departments.map(department => ({ name: department.name, value: department.id }))
                     }
-                    console.log('Role added successfully!');
-                    process.exit(0);
+                ]).then((answers) => {
+                    const { newRoleTitle, newRoleSalary, departmentId } = answers;
+        
+                    // Insert query
+                    const query = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
+                    db.query(query, [newRoleTitle, newRoleSalary, departmentId], (err) => {
+                        if (err) {
+                            console.error('Error occurred:', err);
+                            return;
+                        }
+                        console.log("__________________________________________________");
+                        console.log(`      New Role added successfully! `)
+                        console.log("__________________________________________________");
+                        console.log('');
+                        process.exit(0);
+                    });
+                }).catch((error) => {
+                    console.error('Error occurred:', error);
                 });
-                
             })
-
-            .catch((error) => {
-                console.error('Error occurred:', error);
-            });
-
-        };
-
-
+        }
+        
 
 
     // Update Employee Role Function -----------------------
