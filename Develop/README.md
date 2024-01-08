@@ -1,3 +1,5 @@
+# My Challenge: Create an Express.js Note Taker
+
 # employee-tracker
 ##
 
