@@ -21,6 +21,9 @@ This challenge helps view and make changes to the current database for employees
 
 - Video Link: https://drive.google.com/file/d/1CUTg92LOCPGRWFaZmp4QAulLaSoKGdFn/view
 
+- Deployed Link: https://jesceljames.github.io/employee-tracker/
+
+
 
 ### What I learned:  
 
