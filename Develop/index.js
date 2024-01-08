@@ -5,26 +5,6 @@
     require('console.table'); 
 
 
-// MAIN PROMPT QUESTIONS __________________________________
-    // const questions = [
-        
-    //     {
-    //         type: 'list',
-    //         message: 'What would you like to do?',
-    //         name: 'action',
-    //         choices: [
-    //             'View All Departments', 
-    //             'View All Roles',
-    //             'View All Employees', 
-    //             'Add Deparment',
-    //             'Add Role',
-    //             'Add Employee',
-    //             'Update Employee Role',
-    //             'None',
-    //         ],
-    //     },
-    // ];
-
 // FUNCTIONS _________________________________________________
 
     //Initilize Function ----------------------------------
@@ -41,8 +21,7 @@
             const questions = [
                 {
                     type: 'list',
-                    message: `What would you like to do?
----------------------------`,
+                    message: 'What would you like to do?',
                     name: 'action',
                     choices: [
                         'View All Departments', 
@@ -67,21 +46,27 @@
                             viewAllDepartments();
                             break;
                         case 'View All Employees':
+                            console.clear();
                             viewAllEmployees();
                             break;
                         case 'View All Roles':
+                            console.clear();
                             viewAllRoles();
                             break;
                         case 'Add Deparment':
+                            console.clear();
                             addDepartment();
                             break;
                         case 'Add Employee':
+                            console.clear();
                             addEmployee();
                             break;
                         case 'Add Role':
+                            console.clear();
                             addRole();
                             break;
                         case 'Update Employee Role':
+                            console.clear();
                             updateEmployeeRole();
                             break;
                         
@@ -150,7 +135,7 @@
                 console.clear();
                 console.log(`                                                                                              `);
                 console.log("==============================================================================================");
-                console.log(`                                            EMPLOYEES                                         `);
+                console.log(`                                       EMPLOYEES                                         `);
                 console.log("==============================================================================================");
                 console.table(results);
                 process.exit(0);
