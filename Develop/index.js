@@ -3,7 +3,7 @@
     const inquirer = require('inquirer');
     // const mysql = require('mysql2');
     const db = require('./config/connection');
-    require('console.table'); // to printout that looks like mysql
+    require('console.table'); 
 
 
 // MAIN PROMPT QUESTIONS __________________________________
@@ -39,6 +39,7 @@
 
                     switch (answer.action) {
                         case 'View All Departments':
+                            console.clear();
                             viewAllDepartments();
                             break;
                         case 'View All Employees':
@@ -274,18 +275,7 @@
                 console.error('Error occurred:', error);
             });
 
-
-
-
         }
-
-
-
-
-
-
-
-
 
 
     // Add Role Function -----------------------
@@ -340,19 +330,16 @@
                 const query = `INSERT INTO roles (title, salary, department_id)
                                 VALUES (?, ?, ?)`;
 
-                            
-
-                // getDepartmentId(departmentName, (departmentId) => {
-                    db.query(query, [newRoleTitle, newRoleSalary, departmentId], function (err, results) {
-                   
-                        if (err) {
-                            console.error('Error occurred:', err);
-                            return;
-                        }
-                        console.log('Role added successfully!');
-                        process.exit(0);
-                    });
-                // })
+                db.query(query, [newRoleTitle, newRoleSalary, departmentId], function (err) {
+                
+                    if (err) {
+                        console.error('Error occurred:', err);
+                        return;
+                    }
+                    console.log('Role added successfully!');
+                    process.exit(0);
+                });
+                
             })
 
             .catch((error) => {
@@ -360,41 +347,65 @@
             });
 
         };
-                // function getDepartmentId(departmentName, callback) {
-                //     const query = `SELECT id FROM departments WHERE name = ?`;
-                //     db.query(query, [departmentName], function (err, results) {
-                //         if (err) {
-                //             console.error('Error occurred:', err);
-                //             return callback(null);
-                //         }
-                //         if (results.length > 0) {
-                //             const departmentId = results[0].id;
-                //             return callback(departmentId);
-                //         } else {
-                //             console.log('Department not found');
-                //             return callback(null);
-                //         }
-                //     });
-                // }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
     // Update Employee Role Function -----------------------
+        
+        function updateEmployeeRole() {
 
-       function updateEmployeeRole() {}
+            const queryEmployee = `SELECT id, CONCAT(first_name, " ", last_name) AS name FROM employees`
+
+            db.query(queryEmployee, (err, employees) => {
+                if (err) throw err;
+        
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'employeeId',
+                        message: 'Which employee do you want to update?',
+                        choices: employees.map(employee => ({ name: employee.name, value: employee.id }))
+                    }
+                ])
+                .then(({ employeeId }) => {
+
+                    const queryNewRole = `SELECT id, title FROM roles`
+                    
+                    db.query(queryNewRole, (err, roles) => {
+                        if (err) throw err;
+
+                        inquirer.prompt([
+                            {
+                                type: 'list',
+                                name: 'roleId',
+                                message: 'What is the new role?',
+                                choices: roles.map(role => ({ name: role.title, value: role.id }))
+                            }
+                        ]).then(({ roleId }) => {
+                            
+                            const queryUpdateRole = `UPDATE employees SET role_id = ? WHERE id = ?`
+
+                            db.query(queryUpdateRole, [roleId, employeeId], (err) => {
+                                if (err) throw err;
+                                console.clear();
+                                console.log("__________________________________________________");
+                                console.log(`      Employee's role updated successfully!`       );
+                                console.log("__________________________________________________");
+                                
+                                process.exit(0);
+                            });
+                            
+                        });
+
+                    });
+
+                });
+
+            });
+            
+        }
+        
        
     //______________________________________
        
