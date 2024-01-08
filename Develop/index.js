@@ -200,11 +200,11 @@
                         return;
                     }
                     console.clear();
-                    console.log(`                                                  `);
-                    console.log("__________________________________________________");
+                    console.log(`                                                       `);
+                    console.log("_______________________________________________________");
                     console.log(`      ${departmentName} Department added successfully! `)
-                    console.log("__________________________________________________");
-                    console.log(`                                                  `);
+                    console.log("_______________________________________________________");
+                    console.log(`                                                       `);
                     process.exit(0);
                 });
             })
