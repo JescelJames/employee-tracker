@@ -14,10 +14,6 @@ This challenge helps view and make changes to the current database for employees
 
 
 
-### Photos
-
-
-
 - Repository Link:  https://github.com/JescelJames/employee-tracker
 
 - Video Link: https://drive.google.com/file/d/1CUTg92LOCPGRWFaZmp4QAulLaSoKGdFn/view
@@ -43,14 +39,18 @@ Prerequisites:
  - Nodejs: Download at: https://nodejs.org/en
  - Inquirer: https://www.npmjs.com/package/inquirer
  - console.table: https://www.npmjs.com/package/console.table
- 
+
  ## Usage
 1. Terminal instructions: (make sure you are in the db folder)
+      ```console
         mysql -u root -p
         (type in your password)
         source schema.sql
         source seeds.sql
         exit
+      ```  
+        
+        
 
 2. Command-line instructions:
 
