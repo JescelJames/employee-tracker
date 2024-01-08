@@ -6,35 +6,61 @@
 
 
 // MAIN PROMPT QUESTIONS __________________________________
-    const questions = [
+    // const questions = [
         
-        {
-            type: 'list',
-            message: 'What would you like to do?',
-            name: 'action',
-            choices: [
-                'View All Departments', 
-                'View All Employees', 
-                'View All Roles',
-                'Add Deparment',
-                'Add Employee',
-                'Add Role',
-                'Update Employee Role',
-                'None',
-            ],
-        },
-    ];
+    //     {
+    //         type: 'list',
+    //         message: 'What would you like to do?',
+    //         name: 'action',
+    //         choices: [
+    //             'View All Departments', 
+    //             'View All Roles',
+    //             'View All Employees', 
+    //             'Add Deparment',
+    //             'Add Role',
+    //             'Add Employee',
+    //             'Update Employee Role',
+    //             'None',
+    //         ],
+    //     },
+    // ];
 
 // FUNCTIONS _________________________________________________
 
     //Initilize Function ----------------------------------
 
         function init() {
-        
+            
+            console.clear();
+            console.log(`                                                 `);
+            console.log("=================================================");
+            console.log(`                EMPLOYEE TRACKER                 `)
+            console.log("=================================================");
+            console.log(`                                                 `);
+            
+            const questions = [
+                {
+                    type: 'list',
+                    message: `What would you like to do?
+---------------------------`,
+                    name: 'action',
+                    choices: [
+                        'View All Departments', 
+                        'View All Roles',
+                        'View All Employees', 
+                        'Add Deparment',
+                        'Add Role',
+                        'Add Employee',
+                        'Update Employee Role',
+                        'None',
+                    ],
+                },
+            ];
 
             inquirer.prompt(questions)
+            
                 .then((answer) => {
-
+                    
                     switch (answer.action) {
                         case 'View All Departments':
                             console.clear();
@@ -60,7 +86,8 @@
                             break;
                         
                         default:
-                            console.log('No action selected');
+                            console.log('Goodbye');
+                            process.exit(0);
                     }
                 })
                 .catch((error) => {
@@ -149,6 +176,7 @@
                     return;
                 }
                 console.clear();
+                console.log(`                                                 `);
                 console.log("=================================================");
                 console.log(`                    ROLES                        `)
                 console.log("=================================================");
@@ -186,11 +214,12 @@
                         console.error('Error occurred:', err);
                         return;
                     }
-                    // console.clear();
+                    console.clear();
+                    console.log(`                                                  `);
                     console.log("__________________________________________________");
                     console.log(`      ${departmentName} Department added successfully! `)
                     console.log("__________________________________________________");
-                    console.log('');
+                    console.log(`                                                  `);
                     process.exit(0);
                 });
             })
@@ -270,11 +299,12 @@
                         console.error('Error occurred:', err);
                         return;
                     }
-                    console.log(``);
+                    console.clear();
+                    console.log(`                                                              `);
                     console.log("______________________________________________________________");
                     console.log(`        Employee ${firstName} ${lastName} added successfully! `);
                     console.log("______________________________________________________________");
-                    console.log(``);
+                    console.log(`                                                              `);
                     process.exit(0);
                 });
             }).catch((error) => {
@@ -336,10 +366,12 @@
                             console.error('Error occurred:', err);
                             return;
                         }
+                        console.clear();
+                        console.log(`                                                  `);
                         console.log("__________________________________________________");
                         console.log(`        New Role added successfully!              `)
                         console.log("__________________________________________________");
-                        console.log('');
+                        console.log(`                                                  `);
                         process.exit(0);
                     });
                 }).catch((error) => {
@@ -388,9 +420,11 @@
                             db.query(queryUpdateRole, [roleId, employeeId], (err) => {
                                 if (err) throw err;
                                 console.clear();
+                                console.log(`                                                  `);
                                 console.log("__________________________________________________");
                                 console.log(`      Employee's role updated successfully!`       );
                                 console.log("__________________________________________________");
+                                console.log(`                                                  `);
                                 
                                 process.exit(0);
                             });
