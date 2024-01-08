@@ -301,6 +301,12 @@
                         type: 'input',
                         name: 'newRoleTitle',
                         message: 'Enter the title of this new role: ',
+                        validate: (title) => {
+                            if(!title) {
+                                return 'Please enter a role title.';
+                            }
+                            return true;
+                        },
                     },
                     {
                         type: 'input',
@@ -308,8 +314,8 @@
                         message: 'Enter the salary of the role: ',
                         validate: (salary) => {
                             if (!salary || isNaN(salary)) {
-                                console.log('Please enter a valid annual salary for this role');
-                                return false;
+                                return 'Please enter a valid annual salary for this role. Format: 100000 (no commas)';
+                                
                             }
                             return true;
                         },
@@ -331,7 +337,7 @@
                             return;
                         }
                         console.log("__________________________________________________");
-                        console.log(`      New Role added successfully! `)
+                        console.log(`        New Role added successfully!              `)
                         console.log("__________________________________________________");
                         console.log('');
                         process.exit(0);
