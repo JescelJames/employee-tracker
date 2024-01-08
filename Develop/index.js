@@ -226,11 +226,23 @@
                     type: 'input',
                     name: 'firstName',
                     message: "What is the employee's first name?",
+                    validate: (first_name) => {
+                        if(!first_name) {
+                            return 'Please enter a first name.';
+                        }
+                        return true;
+                    },
                 },
                 {
                     type: 'input',
                     name: 'lastName',
                     message: "What is the employee's last name?",
+                    validate: (last_name) => {
+                        if(!last_name) {
+                            return 'Please enter a last name.';
+                        }
+                        return true;
+                    },
                 },
                 {
                     type: 'list',
@@ -259,9 +271,9 @@
                         return;
                     }
                     console.log(``);
-                    console.log("__________________________________________________");
+                    console.log("______________________________________________________________");
                     console.log(`        Employee ${firstName} ${lastName} added successfully! `);
-                    console.log("__________________________________________________");
+                    console.log("______________________________________________________________");
                     console.log(``);
                     process.exit(0);
                 });
